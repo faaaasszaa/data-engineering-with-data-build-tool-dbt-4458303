@@ -1,22 +1,17 @@
 SELECT
-    violations.summons_number,
-    violations.issue_date,
-    violations.violation_code,
-    violations.is_manhattan_96th_st_below,
-    violations.issuing_agency,
-    violations.violation_location,
-    violations.violation_precinct,
-    violations.issuer_precinct,
-    violations.issuer_code,
-    violations.issuer_command,
-    violations.issuer_squad,
-    violations.violation_time,
-    violations.violation_county,
-    violations.violation_legal_code,
-    codes.fee_usd
-FROM
-    {{ref('silver_parking_violations')}} AS violations
-LEFT JOIN
-    {{ref('silver_parking_violation_codes')}} AS codes ON
-    violations.violation_code = codes.violation_code AND
-    violations.is_manhattan_96th_st_below = codes.is_manhattan_96th_st_below
+  vl.summons_number,
+  vl.registration_state,
+  vl.vehicle_make,
+  vl.plate_type,
+  vl.issuer_code,
+  vl.issuer_command,
+  vl.violation_time,
+  vl.violation_county,
+  vc.definition,
+  vl.is_manhattan_96th_st_below,
+  vc.violation_code,
+  vc.fee_usd
+FROM {{ref('silver_parking_violations')}} as vl
+LEFT JOIN {{ref('silver_parking_violation_codes')}} vc
+  ON vl.violation_code = vc.violation_code
+  AND vl.is_manhattan_96th_st_below = vc.is_manhattan_96th_st_below
